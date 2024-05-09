@@ -60,7 +60,7 @@ class ProductListModel(BaseModel):
     products: list[ProductModel]
 
 
-class CatalogResponseModel(BaseModel):
+class CategoryItemsResponseModel(BaseModel):
     state: int
     version: int
     payloadVersion: int

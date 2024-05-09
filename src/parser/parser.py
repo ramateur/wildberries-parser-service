@@ -4,6 +4,7 @@ from src.adapters.bert.bert import BERTAdapter
 from src.adapters.elasticsearch.category_to_index_mapping import wildberries_category_id_to_es_index_mapping
 from src.adapters.elasticsearch.elasticsearch import ElasticsearchAdapter
 from src.adapters.elasticsearch.models.product import Product
+from src.api.models.item_card import GroupedOption
 from src.api.models.menu import ChildModel
 from src.api.wildberries_api import WildberriesAPI
 from src.config import settings
@@ -56,8 +57,8 @@ class WildberriesParser:
 
     def _upload_to_es(self, product: Product):
         # index in elasticsearch
-        product_id = generate_reproducible_id('ozon' + str(product.sku))
-        es_index = wildberries_category_id_to_es_index_mapping.get(self.super_category_id)
+        product_id = generate_reproducible_id('wildberries' + str(product.sku))
+        es_index = wildberries_category_id_to_es_index_mapping.get(self._super_category_id)
         product.description_vector = self._bert_adapter.text_to_vector(
             product.description if product.description is not None else ''
         )
@@ -71,19 +72,35 @@ class WildberriesParser:
             document_for_update=product.model_dump_for_update(),
         )
 
+    @staticmethod
+    def _generate_item_url(item_id: int) -> str:
+        return f'https://www.wildberries.ru/catalog/{item_id}/detail.aspx'
+
+    def _generate_reviews_string(self, options: list[GroupedOption]) -> str:
+        clean_options = []
+        for group in options:
+            if group.group_name is not None:
+                for option in group.options:
+                    clean_options.append(f'{option.name}:{option.value}')
+
+        return ';'.join(clean_options)
+
     @handle_errors(retries=3)
-    def _parse_product(self, id: int):
-        response = self._wb_api.get_item_details(item_id=id)
+    def _parse_product(self, item_id: int):
+        item_details = self._wb_api.get_item_details(item_id=item_id)
+        item_card = self._wb_api.get_item_card(item_id=item_id)
+        item_photo = self._wb_api.get_item_image(item_id=item_id) if item_details.data.products[0].pics > 0 else None
+        item_reviews = self._wb_api.get_item_reviews(item_id=item_id)
         product = Product(
-            sku=response,
-            title=response,
-            price=response,
-            link=response,
-            photo_link=response,
-            characteristics=response,
-            description=response,
-            rating=response,
-            number_of_reviews=response,
+            sku=item_details.data.products[0].id,
+            title=item_details.data.products[0].name,
+            price=item_details.data.products[0].sizes[0].price.total,
+            link=self._generate_item_url(item_id),
+            photo_link=item_photo,
+            characteristics=self._generate_reviews_string(item_card.grouped_options),
+            description=item_card.description,
+            rating=item_details.data.products[0].reviewRating,
+            number_of_reviews=item_reviews.feedbackCount if item_reviews is not None else 0,
         )
         self._upload_to_es(product=product)
 
