@@ -87,8 +87,6 @@ class WildberriesParser:
 
     @handle_errors(retries=3, delay_factor=1.5)
     def _parse_product(self, item_id: int):
-        if item_id == 219400401:
-            pass
         item_details = self._wb_api.get_item_details(item_id=item_id)
         item_card = self._wb_api.get_item_card(item_id=item_id)
         item_photo = self._wb_api.get_item_image(item_id=item_id) if item_details.data.products[0].pics > 0 else None
