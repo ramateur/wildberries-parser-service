@@ -40,7 +40,7 @@ def setup_file_logger(
     logging.getLogger('').addHandler(file_handler)
 
     # Set logging level for specific loggers
-    loggers = ['sentence_transformers', 'elasticsearch']
+    loggers = ['sentence_transformers', 'elasticsearch', 'httpx']
     for logger_name in loggers:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.INFO if settings.DEBUG else logging.ERROR)

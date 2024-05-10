@@ -103,7 +103,7 @@ class WildberriesAPI(BaseAPI):
         else:
             basket = '16'
 
-        return f'https://basket-{basket}.wb.ru/vol{_short_id}/part{item_id // 1000}/{item_id}'
+        return f'https://basket-{basket}.wbbasket.ru/vol{_short_id}/part{item_id // 1000}/{item_id}'
 
     def get_item_image(self, item_id: int) -> str:
         return f'{self._get_server_url(item_id)}/images/big/1.jpg'

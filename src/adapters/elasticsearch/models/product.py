@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class Product(BaseModel):
-    source: str = 'ozon'
+    source: str
     sku: int
     title: str
     price: Decimal

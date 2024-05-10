@@ -11,7 +11,7 @@ logging.basicConfig(level=logging_level)
 logger = logging.getLogger(__name__)
 
 
-def handle_errors(retries: int = 1, init_delay: int = 1, max_delay: int = 32, delay_factor: int = 1):
+def handle_errors(retries: int = 1, init_delay: float = 1, max_delay: float = 32, delay_factor: float = 1):
     def decorator(func):
         def wrapper(*args, **kwargs):
             delay = init_delay

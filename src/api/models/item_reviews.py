@@ -2,51 +2,51 @@ from pydantic import BaseModel, Field
 
 
 class Photo(BaseModel):
-    fullSizeUri: str
-    minSizeUri: str
+    fullSizeUri: str | None = None
+    minSizeUri: str | None = None
 
 
 class UserDetail(BaseModel):
-    name: str
-    country: str
-    hasPhoto: bool
+    name: str | None = None
+    country: str | None = None
+    hasPhoto: bool | None = None
 
 
 class Answer(BaseModel):
-    state: str
-    lastUpdate: str
-    createDate: str
-    text: str
-    supplierId: int
-    employeeId: int
-    editable: bool
+    state: str | None = None
+    lastUpdate: str | None = None
+    createDate: str | None = None
+    text: str | None = None
+    supplierId: int | None = None
+    employeeId: int | None = None
+    editable: bool | None = None
     metadata: dict | None = None
 
 
 class Feedback(BaseModel):
-    id: str
+    id: str | None = None
     globalUserId: str | None = None
-    wbUserId: int
-    wbUserDetails: UserDetail
-    nmId: int
-    text: str
+    wbUserId: int | None = None
+    wbUserDetails: UserDetail | None = None
+    nmId: int | None = None
+    text: str | None = None
     pros: str | None = None
     cons: str | None = None
     matchingSize: str | None = None
     matchingPhoto: str | None = None
     matchingDescription: str | None = None
-    productValuation: int
-    color: str
-    size: str
-    createdDate: str
-    updatedDate: str
-    answer: Answer
+    productValuation: int | None = None
+    color: str | None = None
+    size: str | None = None
+    createdDate: str | None = None
+    updatedDate: str | None = None
+    answer: Answer | None = None
     metadata: dict | None = None
-    feedbackHelpfulness: dict | None = None
-    photos: list[Photo]
+    feedbackHelpfulness: list | None = None
+    photos: list[Photo] | None = None
     video: str | None = None
     votes: dict | None = None
-    rank: float
+    rank: float | None = None
 
 
 class ValuationDistribution(BaseModel):

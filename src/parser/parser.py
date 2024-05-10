@@ -85,16 +85,19 @@ class WildberriesParser:
 
         return ';'.join(clean_options)
 
-    @handle_errors(retries=3)
+    @handle_errors(retries=3, delay_factor=1.5)
     def _parse_product(self, item_id: int):
+        if item_id == 219400401:
+            pass
         item_details = self._wb_api.get_item_details(item_id=item_id)
         item_card = self._wb_api.get_item_card(item_id=item_id)
         item_photo = self._wb_api.get_item_image(item_id=item_id) if item_details.data.products[0].pics > 0 else None
         item_reviews = self._wb_api.get_item_reviews(item_id=item_id)
         product = Product(
+            source='wildberries',
             sku=item_details.data.products[0].id,
             title=item_details.data.products[0].name,
-            price=item_details.data.products[0].sizes[0].price.total,
+            price=item_details.data.products[0].sizes[0].price.total / 100,
             link=self._generate_item_url(item_id),
             photo_link=item_photo,
             characteristics=self._generate_reviews_string(item_card.grouped_options),

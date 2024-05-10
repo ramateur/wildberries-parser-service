@@ -8,7 +8,7 @@ class Composition(BaseModel):
 class Option(BaseModel):
     name: str
     value: str
-    charc_type: int
+    charc_type: int | None = None
     is_variable: bool | None = None
 
 
@@ -17,7 +17,7 @@ class Color(BaseModel):
 
 
 class Certificate(BaseModel):
-    verified: bool
+    verified: bool | None = None
 
 
 class Selling(BaseModel):
@@ -41,7 +41,7 @@ class ItemCard(BaseModel):
     vendor_code: str | None = None
     description: str | None = None
     options: list[Option]
-    compositions: list[Composition]
+    compositions: list[Composition] | None = None
     certificate: Certificate | None = None
     colors: list[int]
     contents: str | None = None
