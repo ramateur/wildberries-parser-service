@@ -1,0 +1,14 @@
+services:
+  parser:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+        - PYTHONPATH=/app
+    env_file:
+      - ../.env
+    volumes:
+        - ..:/app
+    command: python /app/kafka_parser.py
+    working_dir: /app
+    restart: unless-stopped

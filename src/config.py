@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     ES_USER: str = 'elastic'
     ES_PASSWORD: str = ''
 
+    #  ------------- kafka settings --------
+    KAFKA_BROKER: str = 'localhost:9092'
+    KAFKA_GROUP_ID: str = 'ozon'
+    KAFKA_TOPIC: str = 'ozon'
+
     #  ------------- debug mode settings --------
     DEBUG: bool = False
 

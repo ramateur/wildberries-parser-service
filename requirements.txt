@@ -3,3 +3,4 @@ pydantic-settings
 elasticsearch
 sentence-transformers
 httpx
+confluent-kafka
